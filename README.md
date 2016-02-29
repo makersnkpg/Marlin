@@ -1,4 +1,4 @@
-# TinyBoy 3D Printer Frimware - modified from Marlin 3D Printer Firmware
+# TinyBoy 3D Printer Firmware - modified from Marlin 3D Printer Firmware
 <img align="top" width=175 src="Documentation/Logo/tinyboy.png" />
 
 ## Preparation
