@@ -5,6 +5,7 @@
 
 // #error "You must specify the following parameters related to your distribution"
 
+// todo: makersnkpg: update version information and source code url...
 #if true
 #define SHORT_BUILD_VERSION "1.3.2"
 #define DETAILED_BUILD_VERSION "TinyBoy 1.3.2"

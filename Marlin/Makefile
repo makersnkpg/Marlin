@@ -37,20 +37,28 @@
 # from the commandline with "make HARDWARE_MOTHERBOARD=71" for example
 
 # This defined the board you are compiling for (see boards.h for the options)
-HARDWARE_MOTHERBOARD ?= 11
+#HARDWARE_MOTHERBOARD ?= 11
+# makersnkpg: the tinyboy clone is closest to #define BOARD_RAMPS_14_EFF      45   // RAMPS 1.4 (Power outputs: Extruder, Fan, Fan)
+HARDWARE_MOTHERBOARD ?= 45
 
 # Arduino source install directory, and version number
 # On most linuxes this will be /usr/share/arduino
-ARDUINO_INSTALL_DIR  ?= /usr/share/arduino
-ARDUINO_VERSION      ?= 105
+#ARDUINO_INSTALL_DIR  ?= /usr/share/arduino
+# makersnkpg: changed for building on mac...
+ARDUINO_INSTALL_DIR  ?= /Applications/Arduino.app/Contents/Java
+#ARDUINO_VERSION      ?= 105
+# makersnkpg: updated to current arduino version...
+ARDUINO_VERSION      ?= 166
 
 # You can optionally set a path to the avr-gcc tools. Requires a trailing slash. (ex: /usr/local/avr-gcc/bin)
-AVR_TOOLS_PATH ?=
+#AVR_TOOLS_PATH ?=
+# makersnkpg:
+AVR_TOOLS_PATH ?= /Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/
 
 #Programmer configuration
 UPLOAD_RATE        ?= 115200
 AVRDUDE_PROGRAMMER ?= wiring
-# on most linuxes this will be /dev/ttyACM0 or /dev/ttyACM1 
+# on most linuxes this will be /dev/ttyACM0 or /dev/ttyACM1
 UPLOAD_PORT        ?= /dev/arduino
 
 #Directory used to build files in, contains all the build files, from object files to the final hex file
@@ -218,7 +226,7 @@ endif
 # Set to 16Mhz if not yet set.
 F_CPU ?= 16000000
 
-# Arduino containd the main source code for the Arduino
+# Arduino contains the main source code for the Arduino
 # Libraries, the "hardware variant" are for boards
 # that derives from that, and their source are present in
 # the main Marlin source directory
@@ -231,7 +239,9 @@ else
 HARDWARE_DIR = ../ArduinoAddons/Arduino_0.xx
 endif
 endif
-HARDWARE_SRC = $(HARDWARE_DIR)/$(HARDWARE_VARIANT)/cores/arduino
+# makersnkpg: the path seems broken...
+# HARDWARE_SRC = $(HARDWARE_DIR)/$(HARDWARE_VARIANT)/cores/arduino
+HARDWARE_SRC = $(HARDWARE_DIR)/$(HARDWARE_VARIANT)/avr/cores/arduino
 
 TARGET = $(notdir $(CURDIR))
 
