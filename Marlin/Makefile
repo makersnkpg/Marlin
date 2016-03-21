@@ -253,7 +253,7 @@ VPATH = .
 VPATH += $(BUILD_DIR)
 VPATH += $(HARDWARE_SRC)
 ifeq ($(HARDWARE_VARIANT), $(filter $(HARDWARE_VARIANT),arduino Teensy))
-VPATH += $(ARDUINO_INSTALL_DIR)/libraries/LiquidCrystal
+#VPATH += $(ARDUINO_INSTALL_DIR)/libraries/LiquidCrystal
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/SPI
 ifeq ($(LIQUID_TWI2), 1)
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/Wire
@@ -265,7 +265,7 @@ VPATH += $(ARDUINO_INSTALL_DIR)/libraries/Wire
 VPATH += $(ARDUINO_INSTALL_DIR)/libraries/Wire/utility
 endif
 else
-VPATH += $(HARDWARE_DIR)/libraries/LiquidCrystal
+#VPATH += $(HARDWARE_DIR)/libraries/LiquidCrystal
 VPATH += $(HARDWARE_DIR)/libraries/SPI
 ifeq ($(LIQUID_TWI2), 1)
 VPATH += $(HARDWARE_DIR)/libraries/Wire
@@ -279,7 +279,8 @@ endif
 endif
 ifeq ($(HARDWARE_VARIANT), arduino)
 HARDWARE_SUB_VARIANT ?= mega
-VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/variants/$(HARDWARE_SUB_VARIANT)
+#VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/variants/$(HARDWARE_SUB_VARIANT)
+VPATH += $(ARDUINO_INSTALL_DIR)/hardware/arduino/avr/variants/$(HARDWARE_SUB_VARIANT)
 else
 HARDWARE_SUB_VARIANT ?= standard
 VPATH += $(HARDWARE_DIR)/$(HARDWARE_VARIANT)/variants/$(HARDWARE_SUB_VARIANT)
@@ -292,14 +293,24 @@ ifeq ($(HARDWARE_VARIANT), Teensy)
 SRC = wiring.c
 VPATH += $(ARDUINO_INSTALL_DIR)/hardware/teensy/cores/teensy
 endif
+# makersnkpg: removed unnecessary (obsolete?) SPI.c...
+#CXXSRC = WMath.cpp WString.cpp Print.cpp Marlin_main.cpp	\
+#	MarlinSerial.cpp Sd2Card.cpp SdBaseFile.cpp SdFatUtil.cpp	\
+#	SdFile.cpp SdVolume.cpp planner.cpp stepper.cpp \
+#	temperature.cpp cardreader.cpp configuration_store.cpp \
+#	watchdog.cpp SPI.cpp servo.cpp Tone.cpp ultralcd.cpp digipot_mcp4451.cpp \
+#	vector_3.cpp qr_solve.cpp buzzer.cpp
 CXXSRC = WMath.cpp WString.cpp Print.cpp Marlin_main.cpp	\
 	MarlinSerial.cpp Sd2Card.cpp SdBaseFile.cpp SdFatUtil.cpp	\
 	SdFile.cpp SdVolume.cpp planner.cpp stepper.cpp \
-	temperature.cpp cardreader.cpp configuration_store.cpp \
-	watchdog.cpp SPI.cpp servo.cpp Tone.cpp ultralcd.cpp digipot_mcp4451.cpp \
+	temperature.cpp hooks.cpp cardreader.cpp configuration_store.cpp \
+	watchdog.cpp servo.cpp Tone.cpp ultralcd.cpp digipot_mcp4451.cpp \
 	vector_3.cpp qr_solve.cpp buzzer.cpp
+
 ifeq ($(LIQUID_TWI2), 0)
-CXXSRC += LiquidCrystal.cpp
+# makersnkpg: removed reference to LiquidCrystal...
+#CXXSRC += LiquidCrystal.cpp
+CXXSRC +=
 else
 SRC += twi.c
 CXXSRC += Wire.cpp LiquidTWI2.cpp
