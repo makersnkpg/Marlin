@@ -47,6 +47,7 @@ Here are some standard links for getting your machine calibrated:
 // User-specified version info of this build to display in [Pronterface, etc] terminal window during
 // startup. Implementation of an idea by Prof Braino to inform user that any changes made to this
 // build by the user have been successfully uploaded into firmware.
+// todo: makersnkpg: update to something useful...
 #define STRING_CONFIG_H_AUTHOR "(TinyBoy, TinyBoy 1.3.2)" // Who made the changes.
 #define SHOW_BOOTSCREEN
 #define STRING_SPLASH_LINE1 SHORT_BUILD_VERSION // will be shown during bootup in line 1
@@ -69,8 +70,17 @@ Here are some standard links for getting your machine calibrated:
 
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
+// makersnkpg:
+// RAMPS 1.4 related copied from boards.h
+// #define BOARD_RAMPS_14_EFB      43   // RAMPS 1.4 (Power outputs: Extruder, Fan, Bed)
+// #define BOARD_RAMPS_14_EEB      44   // RAMPS 1.4 (Power outputs: Extruder0, Extruder1, Bed)
+// #define BOARD_RAMPS_14_EFF      45   // RAMPS 1.4 (Power outputs: Extruder, Fan, Fan)
+// #define BOARD_RAMPS_14_EEF      46   // RAMPS 1.4 (Power outputs: Extruder0, Extruder1, Fan)
+// #define BOARD_RAMPS_14_SF       48   // RAMPS 1.4 (Power outputs: Spindle, Controller Fan)
+// We only have one extruder and no heated bed so BOARD_RAMPS_14_EFF shoukd be closest...
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD 40 // MKS-BASE BRD (Pin 9 -> Auto Fan, further detail please change at configuration_adv.h)
+//  #define MOTHERBOARD 40 // MKS-BASE BRD (Pin 9 -> Auto Fan, further detail please change at configuration_adv.h)
+#define MOTHERBOARD BOARD_RAMPS_14_EFF // we're using RAMPS 1.4 instead of MKS-BASE...
 #endif
 
 // Optional custom name for your RepStrap or other custom machine
@@ -145,11 +155,14 @@ Here are some standard links for getting your machine calibrated:
 //#define DUMMY_THERMISTOR_998_VALUE 25
 //#define DUMMY_THERMISTOR_999_VALUE 100
 // :{ '0': "Not used", '4': "10k !! do not use for a hotend. Bad resolution at high temp. !!", '1': "100k / 4.7k - EPCOS", '51': "100k / 1k - EPCOS", '6': "100k / 4.7k EPCOS - Not as accurate as Table 1", '5': "100K / 4.7k - ATC Semitec 104GT-2 (Used in ParCan & J-Head)", '7': "100k / 4.7k Honeywell 135-104LAG-J01", '71': "100k / 4.7k Honeywell 135-104LAF-J01", '8': "100k / 4.7k 0603 SMD Vishay NTCS0603E3104FXT", '9': "100k / 4.7k GE Sensing AL03006-58.2K-97-G1", '10': "100k / 4.7k RS 198-961", '11': "100k / 4.7k beta 3950 1%", '12': "100k / 4.7k 0603 SMD Vishay NTCS0603E3104FXT (calibrated for Makibox hot bed)", '13': "100k Hisens 3950  1% up to 300°C for hotend 'Simple ONE ' & hotend 'All In ONE'", '60': "100k Maker's Tool Works Kapton Bed Thermistor beta=3950", '55': "100k / 1k - ATC Semitec 104GT-2 (Used in ParCan & J-Head)", '2': "200k / 4.7k - ATC Semitec 204GT-2", '52': "200k / 1k - ATC Semitec 204GT-2", '-2': "Thermocouple + MAX6675 (only for sensor 0)", '-1': "Thermocouple + AD595", '3': "Mendel-parts / 4.7k", '1047': "Pt1000 / 4.7k", '1010': "Pt1000 / 1k (non standard)", '20': "PT100 (Ultimainboard V2.x)", '147': "Pt100 / 4.7k", '110': "Pt100 / 1k (non-standard)", '998': "Dummy 1", '999': "Dummy 2" }
-#define TEMP_SENSOR_0 3
-#define TEMP_SENSOR_1 0
-#define TEMP_SENSOR_2 0
-#define TEMP_SENSOR_3 0
-#define TEMP_SENSOR_BED 0
+// makersnkpg: RAMPS 1.4 has 4k7 pullup and e3d v6 lite uses Semitec 104GT2 100k hence 5...
+// also as mentioned in the e3d v6 lite installation manual...
+//#define TEMP_SENSOR_0 3	// original...
+#define TEMP_SENSOR_0 5		// makersnkpg...
+#define TEMP_SENSOR_1 0		// Not used...
+#define TEMP_SENSOR_2 0		// Not used...
+#define TEMP_SENSOR_3 0		// Not used...
+#define TEMP_SENSOR_BED 0	// Not used...
 
 // This makes temp sensor 1 a redundant sensor for sensor 0. If the temperatures difference between these sensors is to high the print will be aborted.
 //#define TEMP_SENSOR_1_AS_REDUNDANT
@@ -163,6 +176,7 @@ Here are some standard links for getting your machine calibrated:
 // The minimal temperature defines the temperature below which the heater will not be enabled It is used
 // to check that the wiring to the thermistor is not broken.
 // Otherwise this would lead to the heater being powered on all the time.
+// todo: makersnkpg: could be higher e.g. 15!? better?
 #define HEATER_0_MINTEMP 5
 #define HEATER_1_MINTEMP 5
 #define HEATER_2_MINTEMP 5
@@ -172,6 +186,7 @@ Here are some standard links for getting your machine calibrated:
 // When temperature exceeds max temp, your heater will be switched off.
 // This feature exists to protect your hotend from overheating accidentally, but *NOT* from thermistor short/failure!
 // You should use MINTEMP for thermistor short/failure protection.
+// todo: raise for being able to print nylon @245 according to e3d v6 lite...
 #define HEATER_0_MAXTEMP 230
 #define HEATER_1_MAXTEMP 230
 #define HEATER_2_MAXTEMP 230
@@ -206,6 +221,8 @@ Here are some standard links for getting your machine calibrated:
                                   // is more then PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
   #define PID_INTEGRAL_DRIVE_MAX PID_MAX  //limit for the integral term
   #define K1 0.95 //smoothing factor within the PID
+  
+  // todo: update pid parameters after pid tuning or are there configuration values stored somewhere?
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
   // Ultimaker
@@ -368,6 +385,7 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = true; // set to true to invert the lo
 // @section machine
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
+// todo: possibly update for correct sense of directions...
 #define INVERT_X_DIR true
 #define INVERT_Y_DIR false
 #define INVERT_Z_DIR true
@@ -418,6 +436,7 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = true; // set to true to invert the lo
 //===========================================================================
 //=========================== Manual Bed Leveling ===========================
 //===========================================================================
+// todo: would be super to have for newbies but requires z probe?
 
 //#define MANUAL_BED_LEVELING  // Add display menu option for bed leveling.
 //#define MESH_BED_LEVELING    // Enable mesh bed leveling.
@@ -439,6 +458,7 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = true; // set to true to invert the lo
 //===========================================================================
 //============================ Bed Auto Leveling ============================
 //===========================================================================
+// todo: would be even better but requires z probe...
 
 // @section bedlevel
 
@@ -583,10 +603,11 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = true; // set to true to invert the lo
  * MOVEMENT SETTINGS
  */
 
+// todo: update HOMING_FEEDRATE
 #define HOMING_FEEDRATE {10*60, 10*60, 2*60, 0}  // set the homing speeds (mm/min)
 
 // default settings
-
+// todo: update...
 #define DEFAULT_AXIS_STEPS_PER_UNIT   {198.42,198.42,6400,101}  // default steps per unit for Ultimaker
 #define DEFAULT_MAX_FEEDRATE          {40, 40, 2, 40}    // (mm/sec)
 #define DEFAULT_MAX_ACCELERATION      {200,200,50,2000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for Skeinforge 40+, for older versions raise them a lot.
@@ -640,6 +661,7 @@ const bool Z_MIN_PROBE_ENDSTOP_INVERTING = true; // set to true to invert the lo
 // @section temperature
 
 // Preheat Constants
+// todo: update PLA_PREHEAT_HOTEND_TEMP to reasonable values...
 #define PLA_PREHEAT_HOTEND_TEMP 180
 #define PLA_PREHEAT_HPB_TEMP 0
 #define PLA_PREHEAT_FAN_SPEED 0   // Insert Value between 0 and 255
